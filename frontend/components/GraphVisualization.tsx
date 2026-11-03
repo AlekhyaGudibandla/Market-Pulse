@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { GraphTopology, GraphNode } from "@/lib/types";
-import { Network, Filter, Info, X, Zap } from "lucide-react";
+import { Network, Filter, X } from "lucide-react";
 
 interface Props {
   data: GraphTopology;
@@ -26,21 +26,20 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
     return data.edges.filter((e) => filteredNodeIds.has(e.from) && filteredNodeIds.has(e.to));
   }, [data.edges, filteredNodeIds]);
 
-  // Compute radial/circular layout coordinates for nodes
+  // Compute radial layout coordinates for nodes
   const nodePositions = useMemo(() => {
     const coords: Record<string, { x: number; y: number }> = {};
     const width = 800;
-    const height = 500;
+    const height = 480;
     const centerX = width / 2;
     const centerY = height / 2;
     const count = filteredNodes.length;
 
     filteredNodes.forEach((node, idx) => {
-      // Place high centrality nodes closer to center, others in outer ring
-      const radius = node.centrality > 0.35 ? 120 : 210;
+      const radius = node.centrality > 0.35 ? 120 : 200;
       const angle = (idx / count) * 2 * Math.PI;
       coords[node.id] = {
-        x: centerX + radius * Math.cos(angle) + (idx % 2 === 0 ? 10 : -10),
+        x: centerX + radius * Math.cos(angle) + (idx % 2 === 0 ? 8 : -8),
         y: centerY + radius * Math.sin(angle),
       };
     });
@@ -50,13 +49,13 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
   const getNodeColor = (type: string) => {
     switch (type) {
       case "COMPANY":
-        return "#38bdf8"; // accent blue
+        return "#0F5132"; // Deep green
       case "PRODUCT":
-        return "#a855f7"; // purple
+        return "#4F46E5"; // Indigo
       case "TECHNOLOGY":
-        return "#10b981"; // emerald
+        return "#D97706"; // Amber
       default:
-        return "#f59e0b"; // amber
+        return "#0284C7"; // Sky
     }
   };
 
@@ -66,15 +65,15 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
   };
 
   return (
-    <div className="relative rounded-xl border border-border bg-surface p-4 shadow-xl">
+    <div className="relative rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
       {/* Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3 mb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-3">
         <div className="flex items-center gap-2">
-          <Network className="h-4 w-4 text-accent-blue" />
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
+          <Network className="h-4 w-4 text-[#0F5132]" />
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
             Temporal Knowledge Graph Topology
           </span>
-          <span className="text-xs text-slate-500 font-mono">
+          <span className="text-xs text-slate-400 font-mono">
             ({filteredNodes.length} nodes · {filteredEdges.length} active edges)
           </span>
         </div>
@@ -86,10 +85,10 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
             <button
               key={t}
               onClick={() => setSelectedType(t)}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition-all ${
+              className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all ${
                 selectedType === t
-                  ? "bg-accent-blue/20 text-accent-blue border border-accent-blue/40"
-                  : "bg-surfaceElevated text-slate-400 hover:text-white"
+                  ? "bg-[#0F5132] text-white shadow-2xs"
+                  : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
               {t}
@@ -99,8 +98,8 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
       </div>
 
       {/* SVG Canvas Container */}
-      <div className="relative flex justify-center overflow-x-auto bg-[#070b12] rounded-lg border border-slate-900 min-h-[480px]">
-        <svg viewBox="0 0 800 500" className="w-full max-w-[850px] h-[480px] select-none">
+      <div className="relative flex justify-center overflow-x-auto bg-[#F8FAFC] rounded-xl border border-slate-200/70 min-h-[480px]">
+        <svg viewBox="0 0 800 480" className="w-full max-w-[850px] h-[480px] select-none">
           <defs>
             <marker
               id="arrow"
@@ -111,7 +110,7 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#94A3B8" />
             </marker>
           </defs>
 
@@ -125,22 +124,23 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
             const midY = (fromPos.y + toPos.y) / 2;
 
             return (
-              <g key={edge.id} className="transition-all hover:opacity-100 opacity-60">
+              <g key={edge.id} className="transition-all hover:opacity-100 opacity-70">
                 <line
                   x1={fromPos.x}
                   y1={fromPos.y}
                   x2={toPos.x}
                   y2={toPos.y}
-                  stroke={edge.label === "COMPETES_WITH" ? "#f43f5e" : "#475569"}
-                  strokeWidth={edge.label === "COMPETES_WITH" ? 1.5 : 1}
+                  stroke={edge.label === "COMPETES_WITH" ? "#EF4444" : "#CBD5E1"}
+                  strokeWidth={edge.label === "COMPETES_WITH" ? 1.5 : 1.2}
                   strokeDasharray={edge.label === "COMPETES_WITH" ? "3 3" : undefined}
                   markerEnd="url(#arrow)"
                 />
                 <text
                   x={midX}
                   y={midY - 4}
-                  fill="#94a3b8"
+                  fill="#64748B"
                   fontSize="9"
+                  fontWeight="500"
                   textAnchor="middle"
                   className="font-mono"
                 >
@@ -166,15 +166,15 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
               >
                 {/* Halo if selected */}
                 {isSelected && (
-                  <circle r="24" fill="none" stroke={color} strokeWidth="2" strokeDasharray="3 3" className="animate-spin" />
+                  <circle r="22" fill="none" stroke={color} strokeWidth="2" strokeDasharray="3 3" />
                 )}
                 {/* Node Circle */}
                 <circle
                   r={isSelected ? 16 : 13}
-                  fill="#0f172a"
+                  fill="#FFFFFF"
                   stroke={color}
-                  strokeWidth={isSelected ? 3 : 2}
-                  className="transition-all duration-200 group-hover:scale-125"
+                  strokeWidth={isSelected ? 3.5 : 2.5}
+                  className="transition-all duration-200 group-hover:scale-125 shadow-sm"
                 />
                 {/* Center Core */}
                 <circle r="5" fill={color} />
@@ -182,10 +182,10 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
                 <text
                   y="24"
                   textAnchor="middle"
-                  fill="#f1f5f9"
+                  fill="#0F172A"
                   fontSize="10"
-                  fontWeight="600"
-                  className="pointer-events-none drop-shadow"
+                  fontWeight="700"
+                  className="pointer-events-none drop-shadow-xs"
                 >
                   {node.label}
                 </text>
@@ -196,38 +196,38 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
 
         {/* Selected Node Inspection Drawer */}
         {activeNode && (
-          <div className="absolute right-3 top-3 w-72 rounded-lg border border-slate-700 bg-surfaceElevated/95 p-4 shadow-2xl backdrop-blur-md animate-fade-in">
+          <div className="absolute right-3 top-3 w-72 rounded-xl border border-slate-200 bg-white p-4 shadow-xl animate-fade-in">
             <div className="flex items-start justify-between">
               <div>
                 <span
-                  className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                  className="rounded px-2 py-0.5 text-[10px] font-bold"
                   style={{
-                    backgroundColor: `${getNodeColor(activeNode.type)}20`,
+                    backgroundColor: `${getNodeColor(activeNode.type)}15`,
                     color: getNodeColor(activeNode.type),
                   }}
                 >
                   {activeNode.type}
                 </span>
-                <h4 className="mt-1 text-sm font-bold text-white">{activeNode.label}</h4>
+                <h4 className="mt-1 text-sm font-bold text-slate-900">{activeNode.label}</h4>
               </div>
               <button
                 onClick={() => setActiveNode(null)}
-                className="rounded p-1 text-slate-400 hover:text-white"
+                className="rounded p-1 text-slate-400 hover:text-slate-700"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <p className="mt-2 text-xs text-slate-300 leading-relaxed">{activeNode.description}</p>
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">{activeNode.description}</p>
 
-            <div className="mt-3 space-y-1.5 border-t border-slate-700/60 pt-2.5 text-[11px]">
-              <div className="flex justify-between text-slate-400">
+            <div className="mt-3 space-y-1.5 border-t border-slate-100 pt-2.5 text-[11px]">
+              <div className="flex justify-between text-slate-500">
                 <span>Sector:</span>
-                <span className="font-medium text-slate-200">{activeNode.sector || "AI"}</span>
+                <span className="font-semibold text-slate-800">{activeNode.sector || "AI"}</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-500">
                 <span>Graph Centrality:</span>
-                <span className="font-bold text-accent-blue">{activeNode.centrality}</span>
+                <span className="font-bold text-[#0F5132] font-mono">{activeNode.centrality}</span>
               </div>
             </div>
           </div>
@@ -235,19 +235,19 @@ export default function GraphVisualization({ data, onNodeSelect }: Props) {
       </div>
 
       {/* Legend */}
-      <div className="mt-3 flex flex-wrap items-center justify-between text-xs text-slate-400">
+      <div className="mt-3 flex flex-wrap items-center justify-between text-xs text-slate-500">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-accent-blue"></span> Company
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#0F5132]"></span> Company
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-accent-purple"></span> Product
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#4F46E5]"></span> Product
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-accent-emerald"></span> Technology
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#D97706]"></span> Technology
           </span>
         </div>
-        <span className="text-[11px] text-slate-500 font-mono">
+        <span className="text-[11px] text-slate-400 font-mono">
           Click nodes to inspect temporal connections &amp; centrality
         </span>
       </div>

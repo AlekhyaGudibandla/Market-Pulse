@@ -11,8 +11,7 @@ import {
   Sparkles,
   Layers,
   ArrowRight,
-  HelpCircle,
-  FileText
+  HelpCircle
 } from "lucide-react";
 
 interface Props {
@@ -26,18 +25,18 @@ export default function AlertCard({ alert, compact = false }: Props) {
   const getSeverityBadge = (level: SeverityLevel) => {
     switch (level) {
       case "CRITICAL":
-        return "bg-rose-500/15 text-rose-400 border-rose-500/40";
+        return "bg-rose-50 text-rose-700 border-rose-200";
       case "HIGH":
-        return "bg-amber-500/15 text-amber-400 border-amber-500/40";
+        return "bg-amber-50 text-amber-800 border-amber-200";
       case "MEDIUM":
-        return "bg-blue-500/15 text-blue-400 border-blue-500/40";
+        return "bg-blue-50 text-blue-700 border-blue-200";
       default:
-        return "bg-slate-500/15 text-slate-400 border-slate-500/40";
+        return "bg-slate-50 text-slate-700 border-slate-200";
     }
   };
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 shadow-lg transition-all hover:border-slate-600/70">
+    <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all hover:border-slate-300">
       {/* Top Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -48,10 +47,10 @@ export default function AlertCard({ alert, compact = false }: Props) {
           >
             {alert.impact.severity} DISRUPTION
           </span>
-          <span className="rounded bg-surfaceElevated px-2 py-0.5 text-xs text-slate-300 font-medium">
+          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-700 font-semibold">
             {alert.primary_entity_name}
           </span>
-          <span className="text-[11px] text-slate-500 font-mono">
+          <span className="text-[11px] text-slate-400 font-mono">
             {new Date(alert.timestamp).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
@@ -62,23 +61,23 @@ export default function AlertCard({ alert, compact = false }: Props) {
 
         {/* Novelty & Impact Metrics */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 rounded-lg bg-surfaceElevated px-2.5 py-1 text-xs">
-            <Sparkles className="h-3 w-3 text-accent-blue" />
-            <span className="text-slate-400">Novelty:</span>
-            <span className="font-bold text-accent-blue">
+          <div className="flex items-center gap-1.5 rounded-lg bg-slate-50 px-2.5 py-1 text-xs border border-slate-100">
+            <Sparkles className="h-3.5 w-3.5 text-[#0F5132]" />
+            <span className="text-slate-500">Novelty:</span>
+            <span className="font-bold text-[#0F5132]">
               {Math.round(alert.novelty.overall_novelty * 100)}%
             </span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-lg bg-surfaceElevated px-2.5 py-1 text-xs">
-            <ShieldAlert className="h-3 w-3 text-accent-rose" />
-            <span className="text-slate-400">Impact:</span>
-            <span className="font-bold text-accent-rose">
+          <div className="flex items-center gap-1.5 rounded-lg bg-slate-50 px-2.5 py-1 text-xs border border-slate-100">
+            <ShieldAlert className="h-3.5 w-3.5 text-rose-600" />
+            <span className="text-slate-500">Impact:</span>
+            <span className="font-bold text-rose-600">
               {Math.round(alert.impact.overall_impact * 100)}%
             </span>
           </div>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="rounded p-1 text-slate-400 hover:bg-surfaceElevated hover:text-white"
+            className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
           >
             {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
@@ -86,55 +85,55 @@ export default function AlertCard({ alert, compact = false }: Props) {
       </div>
 
       {/* Headline */}
-      <h3 className="mt-3 text-base font-bold text-slate-100 hover:text-accent-blue transition-colors">
+      <h3 className="mt-3 text-base font-bold text-slate-900 hover:text-[#0F5132] transition-colors leading-snug">
         {alert.event_title}
       </h3>
 
       {/* WHAT CHANGED */}
-      <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/60 p-3.5">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-accent-blue uppercase tracking-wider">
+      <div className="mt-3 rounded-xl border border-slate-200/80 bg-slate-50/70 p-4">
+        <div className="flex items-center gap-1.5 text-xs font-bold text-[#0F5132] uppercase tracking-wider">
           <Layers className="h-3.5 w-3.5" />
           What Changed (Competitive Landscape Shift)
         </div>
-        <p className="mt-1.5 text-xs leading-relaxed text-slate-300">{alert.what_changed}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-slate-700">{alert.what_changed}</p>
       </div>
 
       {/* EXPANDED DEEP-DIVE DETAILS */}
       {expanded && (
-        <div className="mt-4 space-y-3.5 border-t border-slate-800/80 pt-4 animate-fade-in">
+        <div className="mt-4 space-y-3.5 border-t border-slate-100 pt-4">
           {/* WHY IT MATTERS */}
-          <div className="rounded-lg border border-amber-950/40 bg-amber-950/15 p-3.5">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-400 uppercase tracking-wider">
-              <AlertTriangle className="h-3.5 w-3.5" />
+          <div className="rounded-xl border border-amber-200 bg-[#FEF3C7]/40 p-4">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900 uppercase tracking-wider">
+              <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
               Why It Matters (Strategic Business Significance)
             </div>
-            <p className="mt-1.5 text-xs leading-relaxed text-slate-300">{alert.why_it_matters}</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-amber-950">{alert.why_it_matters}</p>
           </div>
 
           {/* AFFECTED COMPETITORS */}
           {alert.affected_competitors.length > 0 && (
             <div>
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                 Potentially Affected Competitors &amp; Threat Level
               </div>
               <div className="grid gap-2 sm:grid-cols-2">
                 {alert.affected_competitors.map((comp) => (
                   <div
                     key={comp.competitor_id}
-                    className="flex flex-col justify-between rounded-lg border border-slate-800 bg-surfaceElevated p-3"
+                    className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-200">{comp.competitor_name}</span>
+                      <span className="text-xs font-bold text-slate-900">{comp.competitor_name}</span>
                       <span
-                        className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${getSeverityBadge(
+                        className={`rounded px-1.5 py-0.5 text-[10px] font-bold border ${getSeverityBadge(
                           comp.threat_level
                         )}`}
                       >
                         {comp.threat_level} THREAT
                       </span>
                     </div>
-                    <p className="mt-1.5 text-[11px] text-slate-400 leading-normal">{comp.why_affected}</p>
-                    <div className="mt-2 text-[10px] font-mono text-slate-500">
+                    <p className="mt-1.5 text-[11px] text-slate-600 leading-normal">{comp.why_affected}</p>
+                    <div className="mt-2 text-[10px] font-mono text-slate-400">
                       Graph Distance: {comp.graph_distance} Hop{comp.graph_distance > 1 ? "s" : ""}
                     </div>
                   </div>
@@ -144,26 +143,26 @@ export default function AlertCard({ alert, compact = false }: Props) {
           )}
 
           {/* HISTORICAL CONTEXT */}
-          <div className="rounded-lg bg-surfaceElevated p-3 text-xs">
-            <span className="font-semibold text-slate-300">Historical Lineage: </span>
-            <span className="text-slate-400 leading-relaxed">{alert.historical_context}</span>
+          <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-3.5 text-xs">
+            <span className="font-bold text-slate-800">Historical Lineage: </span>
+            <span className="text-slate-600 leading-relaxed">{alert.historical_context}</span>
           </div>
 
           {/* TRACEABLE EVIDENCE CHAIN */}
           {alert.evidence_chain.length > 0 && (
             <div>
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                 Traceable Evidence &amp; Verification Sources
               </div>
               <div className="space-y-1.5">
                 {alert.evidence_chain.map((ev, i) => (
                   <div
                     key={i}
-                    className="flex items-start justify-between gap-3 rounded border border-slate-800/80 bg-slate-900/40 p-2 text-xs"
+                    className="flex items-start justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50/50 p-2.5 text-xs"
                   >
                     <div>
-                      <p className="italic text-slate-300 font-serif">"{ev.statement}"</p>
-                      <span className="text-[11px] text-slate-500 mt-1 block">
+                      <p className="italic text-slate-700 font-serif">"{ev.statement}"</p>
+                      <span className="text-[11px] text-slate-400 mt-1 block">
                         Source: {ev.source_title} ({ev.published_at})
                       </span>
                     </div>
@@ -172,7 +171,7 @@ export default function AlertCard({ alert, compact = false }: Props) {
                         href={ev.source_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1 text-[11px] text-accent-blue hover:underline whitespace-nowrap"
+                        className="flex items-center gap-1 text-[11px] font-medium text-[#0F5132] hover:underline whitespace-nowrap"
                       >
                         Source <ExternalLink className="h-3 w-3" />
                       </a>
@@ -186,12 +185,12 @@ export default function AlertCard({ alert, compact = false }: Props) {
           {/* REMAINING UNCERTAINTIES & STRATEGIC ACTIONS */}
           <div className="grid gap-3 sm:grid-cols-2 pt-1">
             {alert.remaining_uncertainties.length > 0 && (
-              <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 uppercase">
-                  <HelpCircle className="h-3.5 w-3.5 text-amber-400" />
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 uppercase">
+                  <HelpCircle className="h-3.5 w-3.5 text-amber-500" />
                   Remaining Uncertainties
                 </div>
-                <ul className="mt-1.5 space-y-1 text-[11px] text-slate-400 list-disc list-inside">
+                <ul className="mt-1.5 space-y-1 text-[11px] text-slate-600 list-disc list-inside">
                   {alert.remaining_uncertainties.map((u, i) => (
                     <li key={i}>{u}</li>
                   ))}
@@ -200,12 +199,12 @@ export default function AlertCard({ alert, compact = false }: Props) {
             )}
 
             {alert.recommended_strategic_actions.length > 0 && (
-              <div className="rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 uppercase">
-                  <ArrowRight className="h-3.5 w-3.5 text-accent-emerald" />
+              <div className="rounded-xl border border-[#D1E7DD] bg-[#F0FDF4] p-3.5">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#0F5132] uppercase">
+                  <ArrowRight className="h-3.5 w-3.5 text-[#0F5132]" />
                   Recommended Actions
                 </div>
-                <ul className="mt-1.5 space-y-1 text-[11px] text-slate-300 list-disc list-inside">
+                <ul className="mt-1.5 space-y-1 text-[11px] text-slate-700 list-disc list-inside">
                   {alert.recommended_strategic_actions.map((act, i) => (
                     <li key={i}>{act}</li>
                   ))}
