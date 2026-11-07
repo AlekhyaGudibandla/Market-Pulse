@@ -18,7 +18,7 @@
 
 ---
 
-MarketPulse is a **fully production-deployed** competitive intelligence platform for the AI hardware and developer tools sector. It doesn't summarize news in a vacuum — it continuously models the entire competitive landscape as a **Temporal Knowledge Graph**, computes **Novelty and Centrality Shift scores** for every incoming event, and synthesizes traceable intelligence alerts explaining *what changed*, *why it matters*, and *exactly which evidence supports each conclusion*.
+MarketPulse is a competitive intelligence platform for the AI hardware and developer tools sector. It doesn't summarize news in a vacuum — it continuously models the entire competitive landscape as a **Temporal Knowledge Graph**, computes **Novelty and Centrality Shift scores** for every incoming event, and synthesizes traceable intelligence alerts explaining *what changed*, *why it matters*, and *exactly which evidence supports each conclusion*.
 
 This is not a dashboard. It's a live reasoning engine.
 
