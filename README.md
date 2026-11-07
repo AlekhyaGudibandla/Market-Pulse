@@ -544,7 +544,3 @@ pytest --cov=backend/app --cov-report=term-missing
 The harness uses an in-memory SQLite engine — no external services required. All 10 test suites pass in isolation without Kafka, Neo4j, Redis, or Postgres running.
 
 ---
-
-## License
-
-MIT License — built for production competitive intelligence in high-velocity tech markets.
